@@ -2,7 +2,6 @@ import autenticarService from "../services/LoginService";
 import validaAutenticacao from "../validations/LoginValidation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
-import React, { useEffect, useRef } from "react";
 
 const autenticar = async (dados) => {
   // 1º Passo -> Validar dados
