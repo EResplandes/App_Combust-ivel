@@ -1,8 +1,18 @@
-import { Text, View, TextInput, TouchableOpacity, Image, KeyboardAvoidingView } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  Alert
+} from "react-native";
 import React, { useState } from "react";
 import styles from "./style";
 import Icon from "react-native-vector-icons/FontAwesome"; // Importa o ícone FontAwesome
 import Wave from "../../componets/Onda";
+import Abastecimento from "../../hooks/Abastecimento";
+import { useNavigation } from "@react-navigation/native";
 
 export function Formulario({ route }) {
   const { jsonData } = route.params;
@@ -10,10 +20,29 @@ export function Formulario({ route }) {
   const [motorista, setMotorista] = useState(jsonData.motorista);
   const [placa, setPlaca] = useState(jsonData.placa);
   const [veiculo, setVeiculo] = useState(jsonData.veiculo);
-  const [hash, setHash] = useState(jsonData.hash);
+  const [dados, setDados] = useState(jsonData);
+  const [loading, setLoading] = useState(false); // Estado para controlar o indicador de carregamento
+  const navigation = useNavigation(); // Iniciando navigation
+
+  const cadastrarAbastecimento = async () => {
+    setLoading(true); // Ativa o indicador de carregamento
+
+    try {
+      const req = await Abastecimento(dados); // Executa a função de cadastro (supondo que Abastecimento seja uma função assíncrona)
+
+      if (req) {
+        Alert.alert("Sucesso", 'Abastecimento iniciado com sucesso!', [{ text: "Entendido" }]);
+        navigation.navigate("Preloader");
+      }
+    } catch (error) {
+      console.error("Erro ao cadastrar abastecimento:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <View  style={styles.container}>
+    <View style={styles.container}>
       <Wave style={styles.wave} />
       <Image
         source={require("../../../assets/logo.png")}
@@ -51,11 +80,25 @@ export function Formulario({ route }) {
           <TextInput
             style={styles.inputHorimeto}
             placeholder="Digite aqui!"
-            keyboardType="numeric" // Define o tipo de teclado para numérico
+            keyboardType="numeric"
+            onChangeText={(d) => {
+              setDados({
+                ...dados,
+                horimetro: d,
+              });
+            }}
           />
 
-          <TouchableOpacity style={styles.botao}>
-            <Text style={styles.textoBotao}>Iniciar Abastecimento</Text>
+          <TouchableOpacity
+            onPress={cadastrarAbastecimento}
+            style={styles.botao}
+            disabled={loading} // Desativa o botão enquanto estiver carregando
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.textoBotao}>Iniciar Abastecimento</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>

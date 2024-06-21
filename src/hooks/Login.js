@@ -14,9 +14,12 @@ const autenticar = async (dados) => {
     // 3ª Passo -> Verificar resposta da requisição
     if (req.data.resposta.token != null) {
       await AsyncStorage.setItem("token", req.data.resposta.token);
+      await AsyncStorage.setItem(
+        "id_frentista",
+        req.data.resposta.usuario[0].id.toString()
+      );
 
-        return true;
-
+      return true;
     } else {
       Alert.alert("Erro", "Login ou Senha inválido!", [{ text: "Entendido" }]);
     }

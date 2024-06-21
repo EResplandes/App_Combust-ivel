@@ -20,7 +20,7 @@ export default StyleSheet.create({
   },
 
   label: {
-    width: 80, // Largura fixa para os rótulos
+    width: moderateScale(80),
     fontWeight: "bold",
     marginRight: moderateScale(10),
   },
@@ -36,8 +36,8 @@ export default StyleSheet.create({
   title: {
     fontSize: moderateScale(20),
     fontWeight: "500",
-    color: '#fff',
-    marginBottom: 50
+    color: "#fff",
+    marginBottom: 50,
   },
 
   inputHorimeto: {
@@ -73,7 +73,6 @@ export default StyleSheet.create({
     width: moderateScale(150),
     height: moderateScale(150),
     marginBottom: moderateScale(20),
-    // borderRadius: 900,
     borderWidth: 2,
   },
 
